@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-Contexto de diseño de `@aureon/redis-client` para quien lo mantenga o lo integre en un microservicio AUREON nuevo (Scheduling, Inventory & Catalog, Assistant, Notification — ninguno existe todavía como repo real en este workspace). El **uso** (API, ejemplo de `forRootAsync`) está en `README.md`; este archivo es el **por qué** de las decisiones, no lo repitas ahí.
+Contexto de diseño de `@aureon/redis-lib` para quien lo mantenga o lo integre en un microservicio AUREON nuevo (Scheduling, Inventory & Catalog, Assistant, Notification — ninguno existe todavía como repo real en este workspace). El **uso** (API, ejemplo de `forRootAsync`) está en `README.md`; este archivo es el **por qué** de las decisiones, no lo repitas ahí.
+
+**Nombre (decisión 2026-08-23):** el paquete se llamó `@aureon/redis-client` hasta que se le dio repo propio en GitHub (`AUREON-Tecnologia/aureon-redis-lib`) — se renombró a `@aureon/redis-lib` porque "client" podía confundirse con el módulo de negocio `clientes`, cuando en realidad esta librería es transversal a todos los microservicios (auth, permisos, sesiones — nada específico de un dominio). `aureon-auth-back` sigue vendorizando una versión anterior bajo el nombre viejo (`file:vendor/aureon-redis-client-0.8.0.tgz`) — no se migró en la misma ronda, ver "Consumidores actuales" abajo.
 
 ## Idioma en el código — TODO en inglés (decisión 2026-08-15)
 
@@ -30,7 +32,12 @@ Redis es infraestructura compartida, no un microservicio intermedio: cada servic
 
 ## Por qué el paquete no está publicado (mitigado, no resuelto)
 
-Los microservicios AUREON viven en repos separados (no es un monorepo Nx/Turborepo). Publicar esto a un registro real (Azure Artifacts u otro) requiere decidir feed/scope de la organización — decisión pendiente. Mientras tanto, `aureon-auth-back` vendoriza un tarball compilado (`npm pack`) dentro de su propio repo (`vendor/aureon-redis-client-<version>.tgz`, ver `vendor/README.md` de ese repo) en vez de depender de `file:../aureon-redis-client` (carpeta hermana que no existe fuera de esta máquina y rompía builds aislados en Railway/CI). Cuando se decida el registro: publicar con `npm publish` y cambiar la dependencia de `file:` a la versión publicada en cada repo consumidor — no hay otro cambio de código necesario.
+Los microservicios AUREON viven en repos separados (no es un monorepo Nx/Turborepo). Publicar esto a un registro real (Azure Artifacts u otro) requiere decidir feed/scope de la organización — decisión pendiente. Dos mitigaciones conviven hoy, no una sola:
+
+- `aureon-auth-back` (consumidor de antes de este repo) vendoriza un tarball compilado (`npm pack`) dentro de su propio repo (`vendor/aureon-redis-client-<version>.tgz`, todavía bajo el nombre viejo del paquete — ver `vendor/README.md` de ese repo) en vez de depender de `file:../aureon-redis-client` (carpeta hermana que no existe fuera de esta máquina y rompía builds aislados en Railway/CI).
+- Consumidores nuevos (desde que este repo existe en GitHub) instalan directo como dependencia de git apuntando a un tag (`github:AUREON-Tecnologia/aureon-redis-lib#v0.8.0`) — sin `.tgz`, sin copiar nada a mano: `npm install` clona el tag y corre `prepare`/`build` solo. Ver `README.md`, sección "Estado".
+
+Cuando se decida el registro: publicar con `npm publish` y cambiar la dependencia de `file:`/`github:` a la versión publicada en cada repo consumidor — no hay otro cambio de código necesario.
 
 ## Escritura vs lectura no está forzada en tiempo de ejecución
 

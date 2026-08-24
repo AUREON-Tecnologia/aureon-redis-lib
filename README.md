@@ -1,4 +1,4 @@
-# @aureon/redis-client
+# @aureon/redis-lib
 
 Libreria interna compartida: cada microservicio AUREON se conecta directo a
 Redis via `ioredis` (sin un microservicio intermedio). Expone:
@@ -40,15 +40,29 @@ diferencia del `RedisService` generico (que se degrada a no-op sin `REDIS_HOST`)
 `AccessTokenSessionWriterService`/`ReaderService` lanzan `RedisUnavailableError`
 si Redis no esta configurado o no responde — ver `CLAUDE.md` para el porque.
 
-## Estado: vendorizado, no publicado
+## Estado: no publicado a ningun registro, dos formas de consumirlo
 
-Este paquete todavia no se publica a ningun registro (Azure Artifacts u otro).
-`aureon-auth-back` lo consume vendorizando un tarball compilado dentro de su
-propio repo (`vendor/aureon-redis-client-<version>.tgz`, ver `vendor/README.md`
-de ese repo) para que los builds aislados (Railway, CI) no dependan de una
-carpeta hermana que no existe fuera de esta maquina. Cuando se decida el feed
-de Azure Artifacts, publicar con `npm publish` y cambiar la dependencia de
-`file:` a la version publicada.
+Este paquete todavia no se publica a Azure Artifacts/npm/GitHub Packages —
+decision de feed/scope de la organizacion pendiente. Mientras tanto hay dos
+formas de instalarlo, segun el consumidor:
+
+- **Consumidores nuevos** (cualquier microservicio a partir de este repo en
+  GitHub): dependencia de git apuntando a un tag, en el `package.json` del
+  consumidor:
+  ```json
+  "@aureon/redis-lib": "github:AUREON-Tecnologia/aureon-redis-lib#v0.8.0"
+  ```
+  `npm install` clona el tag exacto y corre `prepare` (`npm run build`)
+  automaticamente — no hace falta compilar ni copiar nada a mano.
+- **Consumidores existentes de antes de este repo** (`aureon-auth-back`):
+  siguen vendorizando un tarball compilado dentro de su propio repo
+  (`vendor/aureon-redis-client-<version>.tgz`, ver `vendor/README.md` de ese
+  repo, todavia bajo el nombre de paquete viejo `@aureon/redis-client`) — no
+  se migraron a este repo/nombre nuevo en la misma ronda que se creo este
+  repo, es una migracion aparte sin confirmar todavia.
+
+Cuando se decida un registro real, publicar con `npm publish` y cambiar la
+dependencia de `github:`/`file:` a la version publicada en cada consumidor.
 
 ## Uso
 

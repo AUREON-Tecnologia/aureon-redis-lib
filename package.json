@@ -1,5 +1,5 @@
 {
-  "name": "@aureon/redis-client",
+  "name": "@aureon/redis-lib",
   "version": "0.8.0",
   "description": "Libreria compartida para los microservicios de AUREON: RedisModule de NestJS, whitelist de sesiones de access token JWT entre Identity (escritura) y el resto de servicios (lectura, fail-closed), un JwtAuthGuard listo para importar que valida firma/expiracion + la sesion en Redis (header Authorization o cookie access_token), un RolesGuard/@Roles() para autorizacion por x-roles del contrato OpenAPI, un PermissionsGuard/@RequirePermission() para autorizacion granular via el claim `permissions` del JWT, un CsrfGuard (double-submit cookie) para proteger requests no-GET cuando la sesion viaja por cookie, y un claim `activeModules` en JwtPayload con los codigos de los modulos activos del tenant.",
   "private": true,
