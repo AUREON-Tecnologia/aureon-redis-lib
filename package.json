@@ -1,0 +1,46 @@
+{
+  "name": "@aureon/redis-client",
+  "version": "0.8.0",
+  "description": "Libreria compartida para los microservicios de AUREON: RedisModule de NestJS, whitelist de sesiones de access token JWT entre Identity (escritura) y el resto de servicios (lectura, fail-closed), un JwtAuthGuard listo para importar que valida firma/expiracion + la sesion en Redis (header Authorization o cookie access_token), un RolesGuard/@Roles() para autorizacion por x-roles del contrato OpenAPI, un PermissionsGuard/@RequirePermission() para autorizacion granular via el claim `permissions` del JWT, un CsrfGuard (double-submit cookie) para proteger requests no-GET cuando la sesion viaja por cookie, y un claim `activeModules` en JwtPayload con los codigos de los modulos activos del tenant.",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0"
+  },
+  "dependencies": {
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^22.10.7",
+    "jest": "^29.7.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.3"
+  },
+  "jest": {
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "testEnvironment": "node"
+  }
+}
