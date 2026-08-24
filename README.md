@@ -66,6 +66,11 @@ dependencia de `github:`/`file:` a la version publicada en cada consumidor.
 
 ## Uso
 
+Para integrar esto en un microservicio nuevo desde cero, paso a paso (instalación,
+variables de entorno, wiring de guards, checklist de verificación), ver
+[`INTEGRATION.md`](./INTEGRATION.md) — escrito para que un agente de IA lo pueda seguir
+sin necesitar más contexto. Lo de abajo es solo referencia rápida de la API.
+
 ```ts
 // app.module.ts de cada servicio
 RedisModule.forRootAsync({
